@@ -28,7 +28,6 @@ const App = () => {
     var index = 0  
     do {index = Math.floor(Math.random() * anecdotes.length)} while (index == selected)
     setSelected(index) 
-    console.log()
   }
 
   const handleVoteClick = () => {
