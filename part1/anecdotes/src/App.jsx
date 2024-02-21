@@ -32,11 +32,11 @@ const App = () => {
   }
 
   const handleVoteClick = () => {
-    const maxPoints = Math.max(...copy)
-    const winIndex = copy.findIndex((v) => v === maxPoints)
-    
     copy[selected] += 1
     setPoints(copy)
+
+    const maxPoints = Math.max(...copy)
+    const winIndex = copy.findIndex((v) => v === maxPoints)
     setWinner(winIndex)
   }
   return (
