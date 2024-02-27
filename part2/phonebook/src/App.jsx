@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import Person from './components/Person'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
-import axios from 'axios'
+import personService from './services/personServices'
+
 
 const App = () => {
 
@@ -14,17 +15,13 @@ const App = () => {
   const personName = persons.map((person) => person.name)
   const personNumber = persons.map((person) => person.number)
 
-  const hook = () => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
-  }
-
-  useEffect(hook, [])
+  useEffect(() => {
+    personService
+    .getAll()
+    .then(initialPersons => {
+      setPersons(initialPersons.data)
+    })
+  }, [])
 
 const addName = (event) => {
   event.preventDefault()
@@ -32,20 +29,42 @@ const addName = (event) => {
   const nameObject = {
     name: newName,
     number: newNumber,
-    id: persons.length + 1,
-  }
-  if (newName === '' || newNumber === '') {
-    alert('Please complete all the fields')
-  } else if (personName.includes(newName)) {
-    alert(`The name ${newName} is already added to the phonebook`)
-  } else if (personNumber.includes(newNumber)) {
-    alert(`The number ${newNumber} is already added to the phonebook`)
-  } else  {
-    setPersons(persons.concat(nameObject))
   }
 
-  setNewName('')
-  setNewNumber('')
+    if (personName.includes(newName) && newNumber !== '') {
+      
+      const oldNumber = persons.find((person) => person.name === newName).number
+
+      if (confirm(nameObject.name + ' is already added to the phonebook, replace the old number (' + oldNumber + ') with a new one?')) {
+        
+        const personUpdate = persons.find(update => update.name === newName)
+        //console.log(personUpdate)
+        
+        personService
+        .update(personUpdate.id, nameObject)
+        .then(returnedPerson => {
+          setPersons(persons.map(person => person.id !== personUpdate.id ? person : returnedPerson))
+        })
+      }
+    } else if (newName === '' || newNumber === '') {
+      alert('Please complete all the fields')
+    }
+     else if (personNumber.includes(newNumber)) {
+      const nameNumberRepeat = (persons.find(person => person.number === newNumber)).name
+      //console.log(numberRepeat)
+      alert(`The number ${newNumber} is already added to the phonebook with the name ${nameNumberRepeat}`)
+    } else {
+      personService
+      .create(nameObject)
+      .then(response =>{
+      setPersons(persons.concat(response.data))
+    })
+    }
+
+    setNewName('')
+    setNewNumber('')
+  
+
 
 }
 
@@ -63,6 +82,21 @@ const handleFilterChange = (event) => {
   //console.log(event.target.value)
   setFiltered(event.target.value)
 }
+
+const handleDeleteClickOf = (id) => {
+  const personToDelete = persons.find(n => n.id === id)
+  //console.log(personToDelete.id)
+
+  if (confirm('Delete ' + personToDelete.name + '?')) {
+  personService
+  .remove(personToDelete.id)
+  .then(response => {
+    //console.log(response.data);
+    setPersons(persons.filter(n => n.id !== response.data.id))})
+  }
+}
+
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -73,7 +107,7 @@ const handleFilterChange = (event) => {
         {persons.filter((person) => person.name.toLowerCase().includes(filtered.toLowerCase())).map((person) =>
             <table key={person.id}>
               <tbody>
-                <Person key={person.id} person={person}/>
+                <Person key={person.id} person={person} handleDeleteClick={() => handleDeleteClickOf(person.id)}/>
             </tbody>
             </table>
         )} 
