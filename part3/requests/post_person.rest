@@ -1,0 +1,17 @@
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+    "name": "sdsddf",
+    "number": "6546k554654"
+}
+
+###
+
+POST http://localhost:3001/api/persons/
+Content-Type: application/json
+
+{
+    "name": "sdfsdf",
+    "number": ""
+}
