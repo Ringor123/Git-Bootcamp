@@ -3,6 +3,7 @@ import Person from './components/Person'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import personService from './services/personServices'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -11,6 +12,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filtered, setFiltered] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [isError, setIsError] = useState(false)
 
   const personName = persons.map((person) => person.name)
   const personNumber = persons.map((person) => person.number)
@@ -44,20 +47,48 @@ const addName = (event) => {
         .update(personUpdate.id, nameObject)
         .then(returnedPerson => {
           setPersons(persons.map(person => person.id !== personUpdate.id ? person : returnedPerson))
+          setIsError(false)
+          setErrorMessage(`Information of ${newName} udpdated`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
         })
+        .catch((error) => {
+          console.log(error);
+          setIsError(true)
+          setErrorMessage(`Information of ${newName} has already been removed from server`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })
+          
+        
       }
     } else if (newName === '' || newNumber === '') {
-      alert('Please complete all the fields')
+      setIsError(true)
+      setErrorMessage('Please complete all the fields')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
      else if (personNumber.includes(newNumber)) {
       const nameNumberRepeat = (persons.find(person => person.number === newNumber)).name
       //console.log(numberRepeat)
-      alert(`The number ${newNumber} is already added to the phonebook with the name ${nameNumberRepeat}`)
+      setIsError(true)
+      setErrorMessage(`The number ${newNumber} is already added to the phonebook with the name ${nameNumberRepeat}`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     } else {
       personService
       .create(nameObject)
       .then(response =>{
       setPersons(persons.concat(response.data))
+      setIsError(false)
+      setErrorMessage('Added ' + nameObject.name)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     })
     }
 
@@ -94,6 +125,7 @@ const handleDeleteClickOf = (id) => {
     setPersons(persons.filter(n => n.id !== id))
   })
 
+
   }
 }
 
@@ -101,6 +133,7 @@ const handleDeleteClickOf = (id) => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={errorMessage} error={isError}/>
       <Filter value={filtered} onChange={handleFilterChange}/>
         <h2>Add a new</h2>
       <PersonForm onSubmit={addName} newName={newName} newNumber={newNumber} onNumberChange={handleNumberChange} onNameChange={handleNameChange}/>
