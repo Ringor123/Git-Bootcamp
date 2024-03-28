@@ -1,8 +1,9 @@
 import ReactDOM from 'react-dom/client'
 import axios from 'axios'
 import App from './App'
+const baseUrl = '/api/persons'
 
-axios.get('http://localhost:3001/api/persons').then(response => {
+axios.get(baseUrl).then(response => {
   const persons = response.data
   ReactDOM.createRoot(document.getElementById('root')).render(<App persons={persons} />)
 })
