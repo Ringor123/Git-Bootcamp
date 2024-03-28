@@ -121,14 +121,11 @@ const handleDeleteClickOf = (id) => {
   if (confirm('Delete ' + personToDelete.name + '?')) {
   personService
   .remove(personToDelete.id)
-  .then(response => {
-    //console.log(response.data);
-    setPersons(persons.filter(n => n.id !== response.data.id))})
-    setIsError(false)
-    setErrorMessage(`${personToDelete.name} deleted`)
-    setTimeout(() => {
-      setErrorMessage(null)
-    }, 5000)
+  .then(() => {
+    setPersons(persons.filter(n => n.id !== id))
+  })
+
+
   }
 }
 
