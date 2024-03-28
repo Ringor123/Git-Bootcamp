@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
+const cors = require('cors')
 
 
 const PORT = 3001
@@ -11,6 +12,7 @@ const PORT = 3001
 morgan.token('data', (request, response)  => { return JSON.stringify(request.body) })
 
 app.use(express.json())
+app.use(cors())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 
 let persons = [
@@ -67,11 +69,23 @@ app.get('/api/persons/:id', (request, response) => {
     }
   })
 
+  app.put('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    const body = request.body
+    const person = persons.find(person => person.id === id) 
+
+    person.name = body.name
+    person.number = body.number
+
+    response.json(person)
+  })
+
   app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     console.log(id);
     persons = persons.filter(person => person.id !== id)
   
+    response.json(persons)
     response.status(204).end()
   })
 
@@ -79,14 +93,6 @@ app.get('/api/persons/:id', (request, response) => {
     const body = request.body
     const personsName = persons.map(person => person.name)
     const personsNumber = persons.map(person => person.number)
-
-
-
-    // console.log(personsName);
-    // console.log(body);
-    // console.log(body.number);
-    // console.log(body.name);
-
 
   
     if (!body.name || !body.number) {
