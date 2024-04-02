@@ -1,7 +1,11 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
+const mongoose = require('mongoose')
+const Person = require('./models/person')
+
 
 morgan.token('data', (request, response)  => { return JSON.stringify(request.body) })
 
@@ -35,7 +39,9 @@ let persons = [
 ]
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Person.find({}).then(person => {
+      response.json(person)
+    })
   })
 
 app.get('/info', (request, response) => {
@@ -85,34 +91,51 @@ app.get('/api/persons/:id', (request, response) => {
     response.status(204).end()
   })
 
-  app.post('/api/persons', (request, response) => {
-    const body = request.body
-    const personsName = persons.map(person => person.name)
-    const personsNumber = persons.map(person => person.number)
+  // app.post('/api/persons', (request, response) => {
+  //   const body = request.body
+  //   const personsName = persons.map(person => person.name)
+  //   const personsNumber = persons.map(person => person.number)
 
   
-    if (!body.name || !body.number) {
-      return response.status(400).json({ 
-        error: 'content missing' 
-      })
-    } else if (personsName.find(name => name === body.name)) {
-      return response.status(400).json({ 
-        error: 'name must be unique' 
-      })
-    } else if (personsNumber.find(number => number === body.number)) {
-      return response.status(400).json({ 
-        error: 'number must be unique' 
-      })
-    }
+  //   if (!body.name || !body.number) {
+  //     return response.status(400).json({ 
+  //       error: 'content missing' 
+  //     })
+  //   } else if (personsName.find(name => name === body.name)) {
+  //     return response.status(400).json({ 
+  //       error: 'name must be unique' 
+  //     })
+  //   } else if (personsNumber.find(number => number === body.number)) {
+  //     return response.status(400).json({ 
+  //       error: 'number must be unique' 
+  //     })
+  //   }
   
-    const person = {
+  //   const person = {
+  //     name: body.name,
+  //     number: body.number,
+  //     id: generateId(),
+  //   }
+  
+  //   persons = persons.concat(person)
+  
+  //   response.json(person)
+  // })
+
+  app.post('/api/persons', (request, response) => {
+    const body = request.body
+
+    const person = new Person({
       name: body.name,
       number: body.number,
-      id: generateId(),
-    }
-  
+    })
+
+    person.save().then(result => {
+      console.log(`added ${result.name} number ${result.number} to phonebook`)
+    })
+
     persons = persons.concat(person)
-  
+
     response.json(person)
   })
 
@@ -121,7 +144,7 @@ app.get('/api/persons/:id', (request, response) => {
     return Math.round(id)
   }
 
-  const PORT = process.env.PORT || 3001
+  const PORT = process.env.PORT 
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
   })
