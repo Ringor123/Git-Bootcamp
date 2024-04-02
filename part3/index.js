@@ -130,13 +130,19 @@ app.get('/api/persons/:id', (request, response) => {
       number: body.number,
     })
 
+    if (!body.name || !body.number) {
+           return response.status(400).json({ 
+            error: 'content missing' 
+          })
+      }
+
     person.save().then(result => {
       console.log(`added ${result.name} number ${result.number} to phonebook`)
+      response.json(person)
     })
 
-    persons = persons.concat(person)
-
-    response.json(person)
+    // persons = persons.concat(person)
+    
   })
 
   const generateId = () => {
