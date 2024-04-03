@@ -85,10 +85,14 @@ const addName = (event) => {
       .then(response =>{
       setPersons(persons.concat(response.data))
       setIsError(false)
-      setErrorMessage('Added ' + nameObject.name)
+      setErrorMessage('Adde' + nameObject.name)
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
+      .cath(error => {
+        setErrorMessage(error.response.data.error)
+        console.log(error.response.data.error)
+      })
     })
     }
 
