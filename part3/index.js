@@ -25,6 +25,7 @@ const errorHandler = (error, request, response, next) => {
   } else if (error.name === 'ValidationError') {
     return response.status(400).json({error: error.message})
   }
+  next(error => next(error))
 }
 
 const unknownEndpoint = (request, response) => {
@@ -39,10 +40,7 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/info', (request, response) => {
     const date = new Date()
-    const totalPersons = Person.find({})
-    
-    console.log(totalPersons)
-    console.log(date)
+
     Person.find({}).then(persons => {
     response.send(`
     <div>
@@ -70,14 +68,11 @@ app.get('/api/persons/:id', (request, response, next) => {
 
   app.put('/api/persons/:id', (request, response, next) => {
     const id = request.params.id
-    const body = request.body
-    
-    const person = {
-      name: body.name,
-      number: body.number,
-    }
+    const {name, number} = request.body
 
-    Person.findByIdAndUpdate(id, person, {new:true})
+    Person.findByIdAndUpdate(
+      id, {name, number},
+       {new:true, runValidators: true, context: 'query'})
       .then((updatedPerson) => {
         response.json(updatedPerson)
       })
@@ -94,25 +89,21 @@ app.get('/api/persons/:id', (request, response, next) => {
       .catch(error => next(error))
   })
 
-  app.post('/api/persons', (request, response) => {
+  app.post('/api/persons', (request, response, next) => {
     const body = request.body
 
+    if (!body.name || !body.number) {
+      return response.status(400).json({errror: 'content missing'})
+    }
     const person = new Person({
       name: body.name,
       number: body.number,
     })
-
-    if (!body.name || !body.number) {
-           return response.status(400).json({ 
-            error: 'content missing' 
-          })
-      }
-
-    person.save().then(result => {
-      console.log(`added ${result.name} number ${result.number} to phonebook`)
-      response.json(person)
-    })
     
+    person.save().then(personSaved => {
+      response.json(personSaved)
+    })
+    .catch(error => next(error))
   })
 
   app.use(unknownEndpoint)

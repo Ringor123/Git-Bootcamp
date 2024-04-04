@@ -82,17 +82,20 @@ const addName = (event) => {
     } else {
       personService
       .create(nameObject)
-      .then(response =>{
-      setPersons(persons.concat(response.data))
+      .then(returnedPerson =>{
+      setPersons(persons.concat(returnedPerson.data))
       setIsError(false)
-      setErrorMessage('Adde' + nameObject.name)
+      setErrorMessage('Added ' + nameObject.name)
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
-      .cath(error => {
+    })
+      .catch(error => {
+        setIsError(true)
         setErrorMessage(error.response.data.error)
-        console.log(error.response.data.error)
-      })
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
     })
     }
 
@@ -127,6 +130,11 @@ const handleDeleteClickOf = (id) => {
   .remove(personToDelete.id)
   .then(() => {
     setPersons(persons.filter(n => n.id !== id))
+    setIsError(false)
+    setErrorMessage('Deleted ' + personToDelete.name)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
   })
 
 
