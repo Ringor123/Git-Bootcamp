@@ -56,7 +56,7 @@ const addName = (event) => {
         .catch((error) => {
           console.log(error);
           setIsError(true)
-          setErrorMessage(`Information of ${newName} has already been removed from server`)
+          setErrorMessage(error.response.data.error)
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
