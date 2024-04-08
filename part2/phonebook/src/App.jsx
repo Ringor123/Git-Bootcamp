@@ -56,7 +56,7 @@ const addName = (event) => {
         .catch((error) => {
           console.log(error);
           setIsError(true)
-          setErrorMessage(`Information of ${newName} has already been removed from server`)
+          setErrorMessage(error.response.data.error)
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
@@ -82,13 +82,20 @@ const addName = (event) => {
     } else {
       personService
       .create(nameObject)
-      .then(response =>{
-      setPersons(persons.concat(response.data))
+      .then(returnedPerson =>{
+      setPersons(persons.concat(returnedPerson.data))
       setIsError(false)
       setErrorMessage('Added ' + nameObject.name)
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
+    })
+      .catch(error => {
+        setIsError(true)
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
     })
     }
 
@@ -123,6 +130,11 @@ const handleDeleteClickOf = (id) => {
   .remove(personToDelete.id)
   .then(() => {
     setPersons(persons.filter(n => n.id !== id))
+    setIsError(false)
+    setErrorMessage('Deleted ' + personToDelete.name)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
   })
 
 
