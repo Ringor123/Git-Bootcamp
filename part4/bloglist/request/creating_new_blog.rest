@@ -1,8 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im9wc2RmZ3NzYXNkaWFmYXNzYXNkYXNzIiwiaWQiOiI2NjI3NmJhMzk1NjdiZjBlMWU1MDc4MTMiLCJpYXQiOjE3MTM4NjUyODZ9.CdFwMOQ0vFIxaYZKWZE6q54HDlRXoX4TNQLgLo_THmA
 
 {
-    "title": "NewBlog",
+    "title": "New NewBlog",
     "author": "Pablo",
     "url": "www.pablo.com"
 }
