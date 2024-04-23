@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im9wc2RmZ3NzYXNkaWFmYXNzYXNkYXNzIiwiaWQiOiI2NjI3NmJhMzk1NjdiZjBlMWU1MDc4MTMiLCJpYXQiOjE3MTM4NjUyODZ9.CdFwMOQ0vFIxaYZKWZE6q54HDlRXoX4TNQLgLo_THmA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im9wc2RmZ3Nzc2FzZGlhZmFzc3Nhc2Rhc3MiLCJpZCI6IjY2MjdkMjc1YTVhNGY0NDI2ZmQ0MzVkMSIsImlhdCI6MTcxMzg4NTg0MSwiZXhwIjoxNzEzODg5NDQxfQ.QKcDCRpzcD5aupmmyXogVu-uO5XR9pZ5vgj3FMiYk4M
 
 {
-    "title": "New NewBlog",
+    "title": "New New New NewBlog",
     "author": "Pablo",
     "url": "www.pablo.com"
 }

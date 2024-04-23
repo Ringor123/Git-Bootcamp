@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
     "name": "NewsaaasdassBslog",
-    "username": "opsdfgssasdiafassasdass",
+    "username": "opsdfgsssasdiafasssasdass",
     "password": "aaa"
 
 }
