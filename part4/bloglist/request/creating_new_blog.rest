@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjIyMiIsImlkIjoiNjYyN2U0NTQxYTNkMDJiMmYwYTk5ZjYzIiwiaWF0IjoxNzEzODk0MTEwLCJleHAiOjE3MTM4OTc3MTB9.FYbBqzL6WpZyGbDZsIDVLG4-gFOHlEij8n-r_A-YcQg
 
 {
-    "title": "New Blog",
+    "title": "111",
     "author": "Pablo",
-    "url": "www.pablo.com",
-    "likes": 10
+    "url": "www.pablo.com"
 }
