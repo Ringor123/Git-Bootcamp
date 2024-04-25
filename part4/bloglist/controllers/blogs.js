@@ -19,13 +19,17 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   // console.log('Token recibido', request.token)
   const body = request.body
+  const token = request.token
+  const user = request.user
   
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  const decodedToken = jwt.verify(token, process.env.SECRET)
   if(!decodedToken.id) {
     return response.status(401).json({ error: 'token invalid'})
+  } else if (!token) {
+    return response.status(401).json({ error: 'token missing'})
   }
 
-  const user = await User.findById(decodedToken.id)
+  // const user = await User.findById(decodedToken.id)
   
   const blog = new Blog({
     title: body.title,
@@ -61,13 +65,27 @@ blogsRouter.get('/:id', async (request, response) => {
 
 blogsRouter.delete('/:id', async (request, response) => {
   const id = request.params.id
+  const token = request.token
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  const user = request.user
+
+  if(!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid'})
+  } else if (!token) {
+    return response.status(401).json({ error: 'token missing'})
+  }
+
   const blog = await Blog.findById(id)
+
+  if (blog.user.toString() !== user.id) {
+    return response.status(403).json({ error: 'permission denied' })
+  }
 
   if (blog) {
     await blog.deleteOne()
     response.status(204).end()
   } else {
-    response.status(404).end()
+    response.status(404).json({ error: 'blog not found'}).end()
   }
 })
 
