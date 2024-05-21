@@ -1,8 +1,30 @@
-const NewBlogForm = ({ addBlog, newTitle, newAuthor, newUrl, setNewTitle, setNewAuthor, setNewUrl }) => {
+import { useState } from 'react'
+
+const NewBlogForm = ({ addBlog }) => {
+
+  const [newTitle, setNewTitle] = useState('')
+  const [newAuthor, setNewAuthor] = useState('')
+  const [newUrl, setNewUrl] = useState('')
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+
+    const blogObject = {
+      title: newTitle,
+      author: newAuthor,
+      url:newUrl
+    }
+    await addBlog(blogObject)
+    setNewTitle('')
+    setNewAuthor('')
+    setNewUrl('')
+  }
+
+
   return (
     <div>
       <h2>create new</h2>
-      <form onSubmit={addBlog}>
+      <form onSubmit={handleSubmit}>
         <div>
           Title:
           <input
@@ -37,3 +59,14 @@ const NewBlogForm = ({ addBlog, newTitle, newAuthor, newUrl, setNewTitle, setNew
 }
 
 export default NewBlogForm
+
+
+{/* <NewBlogForm
+              addBlog={addBlog}
+              newTitle={newTitle}
+              setNewTitle={setNewTitle}
+              newAuthor={newAuthor}
+              newUrl={newUrl}
+              setNewAuthor={setNewAuthor}
+              setNewUrl={setNewUrl}
+            /> */}
