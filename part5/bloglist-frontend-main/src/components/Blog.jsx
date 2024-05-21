@@ -5,11 +5,6 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   const [visible, setVisible] = useState(false)
 
   const toggleVisibility = () => {
-    console.log(blog.user)
-    console.log(blog.user.id)
-    console.log(user.id)
-    console.log('Logged-in user ID:', user.id)
-    console.log('Blog user ID:', blog.user ? blog.user.id : 'undefined')
     setVisible(!visible)
   }
 
