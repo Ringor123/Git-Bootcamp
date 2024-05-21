@@ -1,8 +1,22 @@
-const LoginForm = ({ handleLogin, username, password, setUsername, setPassword }) => {
+import { useState } from 'react'
+
+const LoginForm = ({ handleLogin }) => {
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    await handleLogin({ username, password })
+    setUsername('')
+    setPassword('')
+  }
+
+
   return (
     <div>
       <h2>log in to application</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSubmit}>
         <div>
       username
           <input
@@ -27,3 +41,4 @@ const LoginForm = ({ handleLogin, username, password, setUsername, setPassword }
   )}
 
 export default LoginForm
+
