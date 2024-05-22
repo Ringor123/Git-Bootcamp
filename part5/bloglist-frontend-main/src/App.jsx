@@ -16,8 +16,8 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
+  useEffect(async () => {
+    await blogService.getAll().then(blogs =>
       setBlogs(blogs)
     )
   }, [])
@@ -63,6 +63,7 @@ const App = () => {
       const returnedBlog = await blogService.create(blogObject)
       const sortedBlogs = [...blogs, returnedBlog].sort((a, b) => b.likes - a.likes)
       setBlogs(sortedBlogs)
+      blogService.getAll().then(blogs => setBlogs(blogs))
       setIsError(false)
       setErrorMessage(`a new blog ${blogObject.title} by ${blogObject.author} added`)
       setTimeout(() => {
