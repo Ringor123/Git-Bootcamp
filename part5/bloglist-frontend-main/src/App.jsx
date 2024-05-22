@@ -16,8 +16,8 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
+  useEffect(async () => {
+    await blogService.getAll().then(blogs =>
       setBlogs(blogs)
     )
   }, [])
