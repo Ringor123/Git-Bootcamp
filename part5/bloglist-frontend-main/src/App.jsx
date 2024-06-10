@@ -96,7 +96,7 @@ const App = () => {
       const sortedBlogs = updatedBlogs.sort((a, b) => b.likes - a.likes)
       setBlogs(sortedBlogs)
       setIsError(false)
-      setErrorMessage(`Blog ${blogObject.title} by ${blogObject.author} uptaded to ${blogObject.likes} likes`)
+      setErrorMessage(`Blog ${blogObject.title} by ${blogObject.author} updated to ${blogObject.likes} likes`)
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)

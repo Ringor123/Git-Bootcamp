@@ -19,7 +19,7 @@ const LoginForm = ({ handleLogin }) => {
       <h2>log in to application</h2>
       <form onSubmit={handleSubmit}>
         <div>
-      username
+          username
           <input
             type="text"
             value={username}
@@ -28,7 +28,7 @@ const LoginForm = ({ handleLogin }) => {
           />
         </div>
         <div>
-      password
+          password
           <input
             type="password"
             value={password}
@@ -39,11 +39,12 @@ const LoginForm = ({ handleLogin }) => {
         <button type="submit">login</button>
       </form>
     </div>
-  )}
+  )
+}
 
-  LoginForm.propTypes = {
-    handleLogin: PropTypes.func.isRequired
-  }
+LoginForm.propTypes = {
+  handleLogin: PropTypes.func.isRequired
+}
 
 export default LoginForm
 

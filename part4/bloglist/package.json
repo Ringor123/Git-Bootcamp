@@ -7,7 +7,8 @@
     "start": "cross-env NODE_ENV=production node index.js",
     "test": "cross-env NODE_ENV=test node --test",
     "dev": "cross-env NODE_ENV=developement nodemon index.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "start:test": "cross-env NODE_ENV=test node index.js"
   },
   "author": "Pablo Gómez González",
   "license": "MIT",
