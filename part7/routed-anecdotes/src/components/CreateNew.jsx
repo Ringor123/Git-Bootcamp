@@ -1,23 +1,23 @@
-import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useField } from "../hooks"
 
 export const CreateNew = ({ anecdotes, setAnecdotes, setNotification }) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+
+  const navigate = useNavigate()
+
+  const contentField = useField('content')
+  const authorField = useField('author')
+  const infoField = useField('info')
 
   const handleSubmit = (e) => {
     e.preventDefault()
     const newAnecdote = {
-      content,
-      author,
-      info,
+      content: contentField.value,
+      author: authorField.value,
+      info: infoField.value,
       votes: 0,
       id: Math.round(Math.random() * 10000)
     }
-    setContent('')
-    setAuthor('')
-    setInfo('')
     setAnecdotes(anecdotes.concat(newAnecdote))
     setNotification(`a new anecdote ${newAnecdote.content} created!`)
     setTimeout(() => {
@@ -26,25 +26,30 @@ export const CreateNew = ({ anecdotes, setAnecdotes, setNotification }) => {
     navigate('/')
   }
 
-  const navigate = useNavigate()
-
   return (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...contentField.inputProps()} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...authorField.inputProps()} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e) => setInfo(e.target.value)} />
+          <input {...infoField.inputProps()} />
         </div>
         <button>create</button>
+        <button type="button"
+          onClick={() => {
+            contentField.reset()
+            authorField.reset()
+            infoField.reset()
+          }}>
+          reset</button>
       </form>
     </div>
   )
