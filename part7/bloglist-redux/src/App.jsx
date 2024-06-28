@@ -8,24 +8,22 @@ import NewBlogForm from './components/NewBlogForm'
 import Togglable from './components/Togglable'
 import { useSelector, useDispatch } from 'react-redux'
 import { setNotification, clearNotification } from './reducers/notificationReducer'
+import { appendBlog, initialBlogs, setBlogs } from './reducers/blogReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  // const [blogs, setBlogs] = useState([])
 
   const [user, setUser] = useState(null)
 
   const notification = useSelector(state => state.notification)
+  const blogs = useSelector(state => state.blog)
   const dispatch = useDispatch()
 
   const blogFormRef = useRef()
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      const initialBlogs = await blogService.getAll()
-      setBlogs(initialBlogs)
-    }
-    fetchBlogs()
-  }, [])
+    dispatch(initialBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -68,9 +66,7 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
     try {
       const returnedBlog = await blogService.create(blogObject)
-      const sortedBlogs = [...blogs, returnedBlog].sort((a, b) => b.likes - a.likes)
-      setBlogs(sortedBlogs)
-      blogService.getAll().then(blogs => setBlogs(blogs))
+      dispatch(appendBlog(returnedBlog))
       dispatch(setNotification({
         message: `a new blog ${blogObject.title} by ${blogObject.author} added`,
         isError: false
