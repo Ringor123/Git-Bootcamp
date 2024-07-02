@@ -34,6 +34,7 @@ const App = () => {
   const handleLogin = async ({ username, password }) => {
     try {
       await dispatch(userLogin({ username, password }))
+      await dispatch(initialBlogs())
       console.log('Logged-in user ID:', user)
     } catch {
       dispatch(setNotification({
