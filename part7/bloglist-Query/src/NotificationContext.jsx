@@ -11,7 +11,7 @@ const notificationReducer = (state, action) => {
   }
 }
 
-export const initialState = {
+const initialState = {
   message: null,
   isError: null
 }
