@@ -1,20 +1,23 @@
 import { useEffect, useRef } from 'react'
-import Blog from './components/Blog'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
-import NewBlogForm from './components/NewBlogForm'
-import Togglable from './components/Togglable'
 import { useSelector, useDispatch } from 'react-redux'
 import { setNotification, clearNotification } from './reducers/notificationReducer'
 import { initialBlogs, voteBlog, removeBlog, createBlog } from './reducers/blogReducer'
-import { userLogin, initializeLoggedUser, userLogout } from './reducers/userReducer'
+import { userLogin, initializeLoggedUser, userLogout } from './reducers/userLoginReducer'
+import { Routes, Route, Link, useNavigate, Navigate } from 'react-router-dom'
+import UserList from './components/UsersList'
+import User from './components/User'
+import BlogDetails from './components/BlogDetails'
+import Home from './components/Home'
 
 const App = () => {
 
   const notification = useSelector(state => state.notification)
   const blogs = useSelector(state => state.blog)
-  const user = useSelector(state => state.user)
+  const user = useSelector(state => state.login)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const blogFormRef = useRef()
 
@@ -29,12 +32,14 @@ const App = () => {
   const handleLogout = async (event) => {
     event.preventDefault()
     dispatch(userLogout())
+    navigate('/login')
   }
 
   const handleLogin = async ({ username, password }) => {
     try {
       await dispatch(userLogin({ username, password }))
       await dispatch(initialBlogs())
+      navigate('/')
       console.log('Logged-in user ID:', user)
     } catch {
       dispatch(setNotification({
@@ -54,7 +59,7 @@ const App = () => {
         ...blogObject,
         user
       }
-      dispatch(createBlog(newBlog))
+      await dispatch(createBlog(newBlog))
       dispatch(setNotification({
         message: `a new blog ${blogObject.title} by ${blogObject.author} added`,
         isError: false
@@ -64,7 +69,7 @@ const App = () => {
       }, 5000)
     } catch (error) {
       dispatch(setNotification({
-        message: 'Error adding new blog',
+        message: `Error adding new blog ${error.response.data.error}`,
         isError: true
       }))
       setTimeout(() => {
@@ -112,6 +117,7 @@ const App = () => {
       setTimeout(() => {
         dispatch(clearNotification())
       }, 5000)
+      navigate('/')
     } catch (error) {
       dispatch(setNotification({
         message: 'Error removing blog',
@@ -124,36 +130,27 @@ const App = () => {
     }
   }
 
+  const padding = {
+    padding: 5
+  }
+
   return (
     <div>
+      <div>
+        <Link style={padding} to="/">blogs</Link>
+        <Link style={padding} to="/users">users</Link>
+        {user ? <em>{user.username} logged in <button onClick={handleLogout}>logout</button></em> : <Link style={padding} to="/login">login</Link>}
+      </div>
+      <h1>Blog App</h1>
       <Notification message={notification.message} isError={notification.isError} />
-
-      {user === null ? (
-        <div>
-          <LoginForm
-            handleLogin={handleLogin}
-          />
-        </div>
-      ) : (
-        <div>
-          <p>User {user.username} logged-in  <button onClick={handleLogout}>logout</button></p>
-          <Togglable buttonLabel="New blog" ref={blogFormRef}>
-            <NewBlogForm
-              addBlog={addBlog}
-            />
-          </Togglable>
-          <h2>blogs</h2>
-          {blogs.map(blog => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              updateBlog={updateBlog}
-              deleteBlog={deleteBlog}
-              user={user}
-            />
-          ))}
-        </div>
-      )}
+      <Routes>
+        <Route path='/' element={<Home blogFormRef={blogFormRef} blogs={blogs} addBlog={addBlog} updateBlog={updateBlog} deleteBlog={deleteBlog} user={user} />} />
+        <Route path='/users' element={user ? <UserList /> : <LoginForm handleLogin={handleLogin} />} />
+        <Route path='/users/:id' element={<User />} />
+        <Route path='/blogs/:id' element={<BlogDetails updateBlog={updateBlog} deleteBlog={deleteBlog} user={user} />} />
+        <Route path='/login' element={<LoginForm handleLogin={handleLogin} />} />
+        <Route path='*' element={<Navigate to="/" />} />
+      </Routes>
     </div>
   )
 }

@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 
-const userSlice = createSlice({
-  name: 'user',
+const loginSlice = createSlice({
+  name: 'login',
   initialState: null,
   reducers: {
     loginUser(state, action) {
@@ -12,10 +12,9 @@ const userSlice = createSlice({
     },
     logoutUser(state, action) {
       return null
-    }
+    },
   }
 })
-
 
 export const userLogin = (credentials) => {
   return async dispatch => {
@@ -44,7 +43,5 @@ export const userLogout = () => {
   }
 }
 
-
-
-export default userSlice.reducer
-export const { loginUser, logoutUser } = userSlice.actions
+export default loginSlice.reducer
+export const { loginUser, logoutUser, userList } = loginSlice.actions
