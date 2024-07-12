@@ -10,6 +10,8 @@ import UserList from './components/UsersList'
 import User from './components/User'
 import BlogDetails from './components/BlogDetails'
 import Home from './components/Home'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { Navbar, Container, Nav, NavbarText, NavLink, NavbarCollapse, Button, Image } from 'react-bootstrap'
 
 const App = () => {
 
@@ -131,17 +133,33 @@ const App = () => {
   }
 
   const padding = {
-    padding: 5
+    padding: 10
   }
 
   return (
-    <div>
-      <div>
-        <Link style={padding} to="/">blogs</Link>
-        <Link style={padding} to="/users">users</Link>
-        {user ? <em>{user.username} logged in <button onClick={handleLogout}>logout</button></em> : <Link style={padding} to="/login">login</Link>}
-      </div>
-      <h1>Blog App</h1>
+    <Container className='container-fluid'>
+      {/* <h1 className='text-center'>Blog App</h1> */}
+      <Navbar collapseOnSelect expand="md" data-bs-theme="dark" bg='dark' >
+        <Navbar.Toggle aria-controls='responsive-navbar-nav' />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Container>
+            <Nav className='me-auto'>
+               <Navbar.Brand>{/*<Image src="https://static.vecteezy.com/system/resources/previews/030/925/021/non_2x/blogging-icon-design-free-png.png"></Image>*/}Blog App</Navbar.Brand>
+              <NavLink as={Link} to="/">Blogs</NavLink>
+              <NavLink as={Link} to="/users">Users</NavLink>
+              {user ? (
+                <>
+                  <NavbarCollapse className='justify-content-end'>
+                    <NavbarText style={padding}>logged in as: {user.username} </NavbarText>
+                    <Button variant='danger' size='sm' onClick={handleLogout}>logout</Button>
+                  </NavbarCollapse>
+                </>) : (
+                <Nav.Link as={Link} to="/login">Login</Nav.Link>
+              )}
+            </Nav>
+          </Container>
+        </Navbar.Collapse>
+      </Navbar>
       <Notification message={notification.message} isError={notification.isError} />
       <Routes>
         <Route path='/' element={<Home blogFormRef={blogFormRef} blogs={blogs} addBlog={addBlog} updateBlog={updateBlog} deleteBlog={deleteBlog} user={user} />} />
@@ -151,7 +169,7 @@ const App = () => {
         <Route path='/login' element={<LoginForm handleLogin={handleLogin} />} />
         <Route path='*' element={<Navigate to="/" />} />
       </Routes>
-    </div>
+    </Container>
   )
 }
 

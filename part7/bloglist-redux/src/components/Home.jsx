@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Togglable from './Togglable'
 import NewBlogForm from './NewBlogForm'
-import Blog from './Blog'
+import { Table } from 'react-bootstrap'
 
 const Home = ({ blogs, addBlog, updateBlog, deleteBlog, user, blogFormRef }) => {
   return (
@@ -12,17 +12,28 @@ const Home = ({ blogs, addBlog, updateBlog, deleteBlog, user, blogFormRef }) => 
           <NewBlogForm addBlog={addBlog} />
         </Togglable>
       )}
-      {blogs.map((blog) => (
-        <Link to={`/blogs/${blog.id}`} key={blog.id}>
-          <Blog
-            key={blog.id}
-            blog={blog}
-            updateBlog={updateBlog}
-            deleteBlog={deleteBlog}
-            user={user}
-          />
-        </Link>
-      ))}
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Blog title</th>
+            <th>Author</th>
+          </tr>
+        </thead>
+        <tbody>
+          {blogs.map((blog) => (
+            <tr key={blog.id}>
+              <td>
+                <Link to={`/blogs/${blog.id}`}>
+                  {blog.title}
+                </Link>
+              </td>
+              <td>
+                {blog.author}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </div>
   )
 }

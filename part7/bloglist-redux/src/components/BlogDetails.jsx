@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { addComment } from '../reducers/blogReducer'
+import { Button, Col, Container, Row, Form, FormControl, FormGroup } from 'react-bootstrap'
 
 const BlogDetails = ({ updateBlog, deleteBlog, user }) => {
   const [comment, setComment] = useState('')
@@ -41,31 +42,36 @@ const BlogDetails = ({ updateBlog, deleteBlog, user }) => {
   }
 
   return (
-    <div>
-      <div>
+    <Container>
+      <Container>
         <h1>{blog.title}</h1>
-      </div>
-      <div>
-        <a href={blog.url} target="_blank" rel="noreferrer">{blog.url}</a>
-        <p>{blog.likes} likes <button onClick={handleUpdate}>like</button><br />
-          added by {blog.author}</p>
+      </Container>
+      <Container>
+        <Row>
+          <Col>URL: <a href={blog.url} target="_blank" rel="noreferrer">{blog.url}</a></Col>
+          <Col>Created by: {blog.author}</Col>
+          <Col><p>{blog.likes} likes <Button size="sm" onClick={handleUpdate}>like</Button></p></Col>
+        </Row>
+      </Container>
+      <Container className='d-grid gap-2'>
         {user && blog.user && blog.user.id === user.id && (
-          <p><button onClick={handleDelete}>Delete blog</button></p>
+          <Button variant="outline-danger" onClick={handleDelete}>Delete blog</Button>
         )}
-      </div>
-      <div>
+
+        <Form onSubmit={handleCommentSubmit}>
+          <FormGroup>
+            <FormControl type='text' value={comment} onChange={({ target }) => setComment(target.value)} placeholder='Write a comment...' />
+          </FormGroup>
+          <Button type='submit'>Comment</Button>
+        </Form>
+
         <h3>comments</h3>
-        <form onSubmit={handleCommentSubmit}>
-          <input type='text' value={comment} onChange={({ target }) => setComment(target.value)} placeholder='Write a comment...' />
-          <button>Comment</button>
-        </form>
         <ul>
-          {blog.comments.map((comment, index) => (
-            <li key={index}>{comment}</li>
+          {blog.comments.map((comment, index) => (<li key={index}>{comment}</li>
           ))}
         </ul>
-      </div>
-    </div>
+      </Container>
+    </Container>
   )
 }
 

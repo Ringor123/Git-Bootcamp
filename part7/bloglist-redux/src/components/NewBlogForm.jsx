@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { InputGroup, Form, Button, Container, FormGroup, FormLabel, FormControl } from 'react-bootstrap'
 
 const NewBlogForm = ({ addBlog }) => {
 
@@ -13,7 +14,7 @@ const NewBlogForm = ({ addBlog }) => {
     const blogObject = {
       title: newTitle,
       author: newAuthor,
-      url:newUrl
+      url: newUrl
     }
     await addBlog(blogObject)
     setNewTitle('')
@@ -23,42 +24,44 @@ const NewBlogForm = ({ addBlog }) => {
 
 
   return (
-    <div>
+    <Container>
       <h2>create new</h2>
-      <form onSubmit={handleSubmit} className='newBlog-submit'>
-        <div>
-          Title:
-          <input
+      <Form onSubmit={handleSubmit} className='newBlog-submit'>
+        <FormGroup className='mb-3'>
+          <FormLabel>Title: </FormLabel>
+          <FormControl
             type="text"
             value={newTitle}
-            name="Title"
+            placeholder="Enter title"
             onChange={({ target }) => setNewTitle(target.value)}
             className='newBlog-title'
           />
-        </div>
-        <div>
-          Author:
-          <input
+        </FormGroup>
+        <FormGroup className='mb-3'>
+          <FormLabel>Author: </FormLabel>
+          <FormControl
             type="text"
             value={newAuthor}
-            name="Author"
+            placeholder="Enter author"
             onChange={({ target }) => setNewAuthor(target.value)}
             className='newBlog-author'
           />
-        </div>
-        <div>
-          Url:
-          <input
+        </FormGroup>
+        <FormGroup className='mb-3'>
+          <FormLabel>Url: </FormLabel>
+          <FormControl
             type="text"
             value={newUrl}
-            name="Url"
+            placeholder="Enter URL"
             onChange={({ target }) => setNewUrl(target.value)}
             className='newBlog-url'
           />
+        </FormGroup>
+        <div className='d-grid'>
+          <Button type="submit">Save blog</Button>
         </div>
-        <button type="submit">Save blog</button>
-      </form>
-    </div>
+      </Form>
+    </Container>
   )
 }
 
