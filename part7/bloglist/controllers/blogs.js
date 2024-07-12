@@ -27,6 +27,7 @@ blogsRouter.post('/', async (request, response) => {
     author: body.author,
     user,
     likes: body.likes || 0,
+    comments: body.comments,
   });
 
   const savedBlog = await blog.save();
@@ -76,7 +77,6 @@ blogsRouter.delete('/:id', async (request, response) => {
   // }
   await Blog.findByIdAndDelete(id);
 
-  
   user.blogs = user.blogs.filter((blogId) => blogId.toString() !== id);
   await user.save();
 
@@ -104,6 +104,25 @@ blogsRouter.put('/:id', async (request, response) => {
   } else {
     response.status(404).end();
   }
+});
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const { id } = request.params;
+  const { comment } = request.body;
+  
+  if (!comment) {
+    return response.status(400).json({ error: 'Comment missing' });
+  }
+
+  const blog = await Blog.findById(id);
+
+  if (!blog) {
+    return response.status(404).json({ error: 'Blog not found' });
+  }
+
+  blog.comments = blog.comments.concat(comment);
+  const savedBlog = await blog.save();
+  response.status(201).json(savedBlog);
 });
 
 module.exports = blogsRouter;
