@@ -19,7 +19,7 @@ const parseArguments = (args: Array<string>): BmiValues => {
   }
 }
 
-const calculateBmi = (alt: number, kilo: number): string => {
+export const calculateBmi = (alt: number, kilo: number): string => {
   const metro = alt/100
 
   const result = kilo / metro ** 2
@@ -38,7 +38,7 @@ const calculateBmi = (alt: number, kilo: number): string => {
     return "Obese (Class I)"
   } else if (result >= 35 && result <= 39.9) {
     return "Obese (Class II)"
-  } else if (result >= 40) {
+  } else {
     return "Obese (Class III)"
   }
 }
