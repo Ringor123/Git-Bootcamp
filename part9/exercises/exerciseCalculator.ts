@@ -41,7 +41,7 @@ const parseArguments = (args: string[]): ArgvValues => {
 }
 
 
-const calculateExercises = (dailyHours: Array<number>, hoursTarget: number): Result => {
+export const calculateExercises = (dailyHours: Array<number>, hoursTarget: number): Result => {
   const periodLength = dailyHours.length
   const trainingDays = dailyHours.filter(value => value !== 0).length
   const success = dailyHours.every(hours => hours >= hoursTarget)
