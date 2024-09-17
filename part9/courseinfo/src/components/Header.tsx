@@ -1,10 +1,10 @@
 interface HeaderProps {
-  name: string,
+  courseName: string,
 }
 
-const Header = ({name}: HeaderProps) => {
+const Header = ({courseName}: HeaderProps) => {
   return (
-    <h1>{name}</h1>
+    <h1>{courseName}</h1>
   )
 }
 
