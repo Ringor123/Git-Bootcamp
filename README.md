@@ -54,6 +54,8 @@ This part covers the basics of how web applications work, including HTTP, the st
 
 [Link to part 0](https://fullstackopen.com/en/part0)
 
+
+
 ## Part 1: Introduction to React
 The first part introduces React and how to build simple web applications using components and state. Topics covered include:
 
@@ -62,6 +64,8 @@ The first part introduces React and how to build simple web applications using c
 + Handling events and state in React.
 
 [Link to part 1](https://fullstackopen.com/en/part1)
+
+
 
 ## Part 2: Communicating with Server
 This part focuses on how frontend applications can interact with backends via REST APIs. You'll learn about:
@@ -72,6 +76,8 @@ This part focuses on how frontend applications can interact with backends via RE
 
 [Link to part 2](https://fullstackopen.com/en/part2)
 
+
+
 ## Part 3: Programming a Server with Node.js and Express
 In this part, you'll start building your own backend using Node.js and Express. You'll learn about:
 
@@ -80,6 +86,8 @@ In this part, you'll start building your own backend using Node.js and Express. 
 + Handling routes, middleware, and errors.
 
 [Link to part 3](https://fullstackopen.com/en/part3)
+
+
 
 ## Part 4: Testing Express Servers, User Admin
 Here, you’ll dive into:
@@ -90,6 +98,8 @@ Here, you’ll dive into:
 
 [Link to part 4](https://fullstackopen.com/en/part4)
 
+
+
 ## Part 5: Frontend in React with State Management
 This part deepens the React knowledge by adding state management with complex hooks and introduces React Router for navigation:
 
@@ -97,6 +107,8 @@ This part deepens the React knowledge by adding state management with complex ho
 + Managing navigation with React Router.
 
 [Link to part 5](https://fullstackopen.com/en/part5)
+
+
 
 ## Part 6: Advanced State Management with Redux
 This part focuses on Redux, a powerful tool for managing state in larger applications. You’ll learn:
@@ -106,6 +118,8 @@ This part focuses on Redux, a powerful tool for managing state in larger applica
 
 [Link to part 6](https://fullstackopen.com/en/part6)
 
+
+
 ## Part 7: React Router, Custom Hooks, Styling
 In this part, you’ll explore advanced concepts of React, including:
 
@@ -114,6 +128,8 @@ In this part, you’ll explore advanced concepts of React, including:
 + Setting up routing with React Router.
 
 [Link to part 7](https://fullstackopen.com/en/part7)
+
+
 
 ## Part 9: TypeScript
 The last part of the course introduces TypeScript, a strongly typed superset of JavaScript. You’ll learn:
