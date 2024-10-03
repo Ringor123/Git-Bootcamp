@@ -1,8 +1,7 @@
-# React + Vite
+# To start the application you must provide an API key
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+```bash
+  set "VITE_SOME_KEY=INSERT HERE YOUR openweathermap API KEY" && npm run dev // Para Windows cmd.exe
+  ($env:VITE_SOME_KEY="INSERT HERE YOUR openweathermap API KEY") -and (npm run dev) // Para Windows PowerShell
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
