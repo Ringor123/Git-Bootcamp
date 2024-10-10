@@ -131,12 +131,8 @@ const typeDefs = gql`
       genres: [String!]!
     ): Book
 
-    editAuthor(
-      name: String!
-      setBornTo: Int!
-    ): Author
+    editAuthor(name: String!, setBornTo: Int!): Author
   }
-
 `;
 
 const resolvers = {
@@ -159,13 +155,13 @@ const resolvers = {
 
   Author: {
     bookCount: (root) => {
-      return books.filter((book) => book.author === root.name).length;
+      return books.filter((book) => book.author.toLowerCase() === root.name.toLowerCase()).length;
     },
   },
 
   Mutation: {
     addBook: (root, args) => {
-      if (books.find((book) => book.title === args.title)) {
+      if (books.find((book) => book.title.toLowerCase() === args.title.toLowerCase())) {
         throw new GraphQLError("Book already exists", {
           extensions: {
             code: "BOOK_ALREADY_EXISTS",
@@ -174,9 +170,21 @@ const resolvers = {
         });
       }
 
-      if(!authors.find((author) => author.name === args.author)){
-        const author = {name: args.author,  id: uuid()}
-        authors = authors.concat(author)
+      if (args.genres.some((genre) => genre.trim() === "")) {
+        throw new GraphQLError(
+          "Genres cannot be empty or contain only whitespaces",
+          {
+            extensions: {
+              code: "EMPTY_GENRES",
+              invalidArgs: args.genres,
+            },
+          }
+        );
+      }
+
+      if (!authors.find((author) => author.name.toLowerCase() === args.author.toLowerCase())) {
+        const author = { name: args.author, id: uuid() };
+        authors = authors.concat(author);
       }
       const book = { ...args, id: uuid() };
       books = books.concat(book);
@@ -184,14 +192,24 @@ const resolvers = {
     },
 
     editAuthor: (root, args) => {
-      const author = authors.find((author) => author.name === args.name);
+      const author = authors.find((author) => author.name.toLowerCase() === args.name.toLowerCase());
       if (!author) {
-        return null
+        throw new GraphQLError(
+          "Author's name doesn't exist",
+          {
+            extensions: {
+              code: "WRONG_AUTHOR",
+              invalidArgs: args.name,
+            },
+          }
+        );
       }
-      const authorUpdated = {...author, born: args.setBornTo}
-      authors = authors.map((author) => author.name === args.name ? authorUpdated : author)
-      return authorUpdated
-    }
+      const authorUpdated = { ...author, born: args.setBornTo };
+      authors = authors.map((author) =>
+        author.name.toLowerCase() === args.name.toLowerCase() ? authorUpdated : author
+      );
+      return authorUpdated;
+    },
   },
 };
 
